@@ -213,15 +213,29 @@ function mostPointsScored() {
 }
 
 function winningTeam() {
-  let totalPoints = {};
-  let teamTotal = {};
-  for (const team in gameObject()) {
-    for (const player in gameObject()[team].players) {
-      totalPoints = {
-        team: gameObject()[team].teamName,
-        points: [gameObject()[team].players[player].points]
-      };
-    }
+  let totalPoints = [];
+  let points = 0;
+  let message
+  
+  function returnPoints(team, player) {
+    return gameObject()[team].players[player].points;
   }
-  return totalPoints;
+  
+  for (const team in gameObject()) {
+    points = 0;
+    totalPoints.push(gameObject()[team].teamName);
+    for (const player in gameObject()[team].players) {
+      points = points + returnPoints(team, player)
+    }
+    totalPoints.push(points);
+  }
+  
+  if (totalPoints[1] > totalPoints[3]) {
+    message = `The ${totalPoints[0]} are the winner with ${totalPoints[1]} points.`;
+  } else if (totalPoints[1] === totalPoints[3]) {
+    message = `The game is a tie.  Both teams had ${totalPoints[1]} points.`
+  } else {
+    message = `The ${totalPoints[2]} are the winner with ${totalPoints[3]} points.`
+  }
+  return message;
 }
